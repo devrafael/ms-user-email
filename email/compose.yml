@@ -1,0 +1,26 @@
+
+services:
+  postgres_email_container:
+    image: postgres:latest
+    container_name: postgres_email_container
+    environment:
+      - POSTGRES_USER=rafael
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=email_bd
+      - PGPORT=5491
+    ports:
+      - "5491:5491"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+  app:
+    build: .
+    container_name: email_container
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres_email_container
+
+volumes:
+  postgres_data:
+    driver: local

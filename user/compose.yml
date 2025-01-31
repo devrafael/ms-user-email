@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres_user_container:
+    image: postgres:latest
+    container_name: postgres_user_container
+    environment:
+      - POSTGRES_USER=rafael
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=user_bd
+      - PGPORT=5490
+    ports:
+      - "5490:5490"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+  app:
+    build: .
+    container_name: user_container
+    ports:
+      - "8086:8086"
+    depends_on:
+        - postgres_user_container
+
+volumes:
+  postgres_data:
+    driver: local
